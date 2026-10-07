@@ -1,0 +1,24 @@
+import { request, expect } from '@playwright/test';
+import fs from 'node:fs';
+const base=process.env.TEST_URL || 'http://localhost:3003';
+const context=await request.newContext({baseURL:base,timeout:30000});
+const password=fs.readFileSync('.storage/initial-login.txt','utf8').match(/Password: (.+)/)[1];
+let csrf=(await(await context.get('/api/index.php?action=session')).json()).csrf;
+const api=async(action,data,status=200)=>{const r=await context.post('/api/index.php?action='+action,{headers:{'X-CSRF-Token':csrf},data});const b=await r.json();expect(r.status(),JSON.stringify(b)).toBe(status);if(b.csrf)csrf=b.csrf;return b;};
+await api('login',{email:'admin@vkdsolutions.com',password});
+const f=JSON.parse(fs.readFileSync('test-results/fixture-records.json','utf8'));
+const snapshot=async()=>(await(await context.get('/api/index.php?action=bootstrap')).json()).data;
+const before=await snapshot();
+await api('import',{resource:'clients',records:[{...f.client,id:undefined,client_code:'QA-ROLLBACK-'+Date.now()},{...f.client,id:undefined}]},422);
+expect((await snapshot()).clients.length).toBe(before.clients.length);console.log('PASS: failed import rolls back every row');
+await api('save',{resource:'quotations',id:f.quote.id,data:{title:'Must roll back',items:[{description:'invalid negative quantity',quantity:-1,unit_price:10}]}},422);
+const quote=(await snapshot()).quotations.find(q=>q.id===f.quote.id);expect(quote.title).toBe(f.quote.title);expect(quote.items.length).toBe(f.quote.items.length);console.log('PASS: failed line edit restores parent and original items');
+const r=await context.post('/api/index.php?action=upload',{headers:{'X-CSRF-Token':csrf},multipart:{client_id:String(f.client.id),project_id:'',file_name:'Renamed QA file.txt',notes:'Upload notes survive',file_type:'other',file:{name:'source.txt',mimeType:'text/plain',buffer:Buffer.from('QA metadata bytes')}}});
+expect(r.status()).toBe(200);const upload=(await r.json()).result;expect(upload.file_name).toBe('Renamed QA file.txt');expect(upload.notes).toBe('Upload notes survive');
+expect(await (await context.get(upload.file_url)).text()).toBe('QA metadata bytes');console.log('PASS: upload title, type, notes and actual bytes persist');
+const bad=await context.post('/api/index.php?action=upload',{headers:{'X-CSRF-Token':csrf},multipart:{client_id:String(f.client.id),file:{name:'script.php',mimeType:'application/x-httpd-php',buffer:Buffer.from('<?php echo 1;')}}});expect(bad.status()).toBe(422);console.log('PASS: executable upload rejected');
+const reminders=(await api('maintenance',{})).data.emailNotifications;
+const notice=reminders.find(n=>n.client_id===f.client.id);if(notice){await api('email_send',{id:notice.id},422);const failed=(await snapshot()).emailNotifications.find(n=>n.id===notice.id);expect(failed.status).toBe('Failed');expect(failed.error_message).toContain('SMTP');console.log('PASS: missing SMTP produces visible failed status');}
+for(const path of ['/.storage/initial-login.txt','/api/config.local.php','/api/setup.php']) expect((await context.get(path)).status()).toBe(403);
+console.log('PASS: runtime secrets, login file and setup script blocked over HTTP');
+await context.dispose();

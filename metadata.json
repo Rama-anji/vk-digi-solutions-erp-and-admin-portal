@@ -1,0 +1,6 @@
+{
+  "name": "VK Digi Solutions ERP & Admin Portal",
+  "description": "Production-ready Enterprise ERP & Admin Portal for VK Digi Solutions agency featuring Client Subscriptions, Renewal Alerts, Billing, Vendor Ledger, and HR Engine.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,13 @@
+.git
+.github
+node_modules
+dist
+.storage
+.db-validation
+.env
+.env.*
+!.env.example
+api/config.local.php
+test-results
+playwright-report
+tests

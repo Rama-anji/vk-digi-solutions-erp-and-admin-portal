@@ -1,0 +1,12 @@
+import { chromium } from '@playwright/test';
+import fs from 'node:fs';
+const base=process.env.TEST_URL || 'http://localhost:3003';
+const password=fs.readFileSync('.storage/initial-login.txt','utf8').match(/Password: (.+)/)[1];
+const browser=await chromium.launch({headless:true,executablePath:'C:/Users/KEEP SMILE/AppData/Local/ms-playwright/chromium-1232/chrome-win64/chrome.exe'});
+const page=await browser.newPage({viewport:{width:1440,height:1000}});
+const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)console.log('HTTP',r.status(),r.url());});
+await page.goto(base);await page.getByLabel('Email',{exact:true}).fill('admin@vkdsolutions.com');await page.getByLabel('Password',{exact:true}).fill(password);await page.getByRole('button',{name:'Sign in',exact:true}).click();
+await page.getByRole('button',{name:'Clients Directory',exact:true}).waitFor({timeout:60000});
+console.log('BODY', (await page.locator('body').innerText()).slice(0,3500));console.log('ERRORS',errors);
+fs.mkdirSync('test-results',{recursive:true});await page.screenshot({path:'test-results/initial.png',fullPage:true});
+await browser.close();

@@ -1,0 +1,1483 @@
+{
+  "Admin": {
+    "id": {
+      "kind": "column",
+      "source": "admins.id"
+    },
+    "name": {
+      "kind": "column",
+      "source": "admins.name"
+    },
+    "email": {
+      "kind": "column",
+      "source": "admins.email"
+    },
+    "role": {
+      "kind": "column",
+      "source": "admins.role"
+    },
+    "status": {
+      "kind": "column",
+      "source": "admins.status"
+    }
+  },
+  "Client": {
+    "id": {
+      "kind": "column",
+      "source": "clients.id"
+    },
+    "client_code": {
+      "kind": "column",
+      "source": "clients.client_code"
+    },
+    "name": {
+      "kind": "column",
+      "source": "clients.name"
+    },
+    "client_type": {
+      "kind": "column",
+      "source": "clients.client_type"
+    },
+    "contact_person": {
+      "kind": "column",
+      "source": "clients.contact_person"
+    },
+    "email": {
+      "kind": "column",
+      "source": "clients.email"
+    },
+    "mobile": {
+      "kind": "column",
+      "source": "clients.mobile"
+    },
+    "city": {
+      "kind": "column",
+      "source": "clients.city"
+    },
+    "address": {
+      "kind": "column",
+      "source": "clients.address"
+    },
+    "source": {
+      "kind": "column",
+      "source": "clients.source"
+    },
+    "status": {
+      "kind": "column",
+      "source": "clients.status"
+    },
+    "start_date": {
+      "kind": "column",
+      "source": "clients.start_date"
+    },
+    "notes": {
+      "kind": "column",
+      "source": "clients.notes"
+    },
+    "created_at": {
+      "kind": "column",
+      "source": "clients.created_at"
+    },
+    "custom_fields": {
+      "kind": "column",
+      "source": "clients.custom_fields"
+    },
+    "fb_page_id": {
+      "kind": "column",
+      "source": "clients.fb_page_id"
+    },
+    "fb_page_name": {
+      "kind": "join",
+      "source": "facebook_pages.page_name",
+      "note": "Join using clients.fb_page_id."
+    },
+    "fb_form_id": {
+      "kind": "column",
+      "source": "clients.fb_form_id"
+    },
+    "fb_form_name": {
+      "kind": "JSON",
+      "source": "facebook_pages.lead_forms",
+      "path": "[form_id = clients.fb_form_id].form_name",
+      "note": "Do not duplicate form names per client."
+    },
+    "fb_auto_whatsapp": {
+      "kind": "column",
+      "source": "clients.fb_auto_whatsapp"
+    }
+  },
+  "FacebookPageMapping": {
+    "page_id": {
+      "kind": "column",
+      "source": "facebook_pages.page_id"
+    },
+    "page_name": {
+      "kind": "column",
+      "source": "facebook_pages.page_name"
+    },
+    "category": {
+      "kind": "column",
+      "source": "facebook_pages.category"
+    },
+    "followers_count": {
+      "kind": "column",
+      "source": "facebook_pages.followers_count"
+    },
+    "lead_forms": {
+      "kind": "column",
+      "source": "facebook_pages.lead_forms"
+    }
+  },
+  "FacebookLead": {
+    "id": {
+      "kind": "column",
+      "source": "facebook_leads.id"
+    },
+    "client_id": {
+      "kind": "column",
+      "source": "facebook_leads.client_id"
+    },
+    "client_name": {
+      "kind": "join",
+      "source": "clients.name",
+      "note": "Join client_id."
+    },
+    "fb_page_id": {
+      "kind": "column",
+      "source": "facebook_leads.fb_page_id"
+    },
+    "fb_page_name": {
+      "kind": "join",
+      "source": "facebook_pages.page_name",
+      "note": "Join fb_page_id."
+    },
+    "form_id": {
+      "kind": "column",
+      "source": "facebook_leads.form_id"
+    },
+    "form_name": {
+      "kind": "JSON",
+      "source": "facebook_pages.lead_forms",
+      "path": "[form_id = facebook_leads.form_id].form_name",
+      "note": ""
+    },
+    "ad_id": {
+      "kind": "column",
+      "source": "facebook_leads.ad_id"
+    },
+    "ad_name": {
+      "kind": "column",
+      "source": "facebook_leads.ad_name"
+    },
+    "campaign_name": {
+      "kind": "column",
+      "source": "facebook_leads.campaign_name"
+    },
+    "lead_name": {
+      "kind": "column",
+      "source": "facebook_leads.lead_name"
+    },
+    "lead_phone": {
+      "kind": "column",
+      "source": "facebook_leads.lead_phone"
+    },
+    "lead_email": {
+      "kind": "column",
+      "source": "facebook_leads.lead_email"
+    },
+    "city": {
+      "kind": "column",
+      "source": "facebook_leads.city"
+    },
+    "service_requested": {
+      "kind": "column",
+      "source": "facebook_leads.service_requested"
+    },
+    "budget": {
+      "kind": "column",
+      "source": "facebook_leads.budget"
+    },
+    "custom_answers": {
+      "kind": "column",
+      "source": "facebook_leads.custom_answers"
+    },
+    "status": {
+      "kind": "column",
+      "source": "facebook_leads.status"
+    },
+    "created_time": {
+      "kind": "column",
+      "source": "facebook_leads.created_time"
+    },
+    "whatsapp_status": {
+      "kind": "calculated",
+      "source": "communications.status",
+      "note": "v_facebook_leads: inbound reply > delivered/read > sent > not sent."
+    },
+    "last_whatsapp_at": {
+      "kind": "calculated",
+      "source": "communications.sent_at",
+      "note": "v_facebook_leads: latest successful WhatsApp message for lead_id."
+    },
+    "notes": {
+      "kind": "column",
+      "source": "facebook_leads.notes"
+    }
+  },
+  "WhatsAppTemplate": {
+    "meta_template": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "templates[].meta_template",
+      "note": ""
+    },
+    "id": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "templates[].id",
+      "note": ""
+    },
+    "name": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "templates[].name",
+      "note": ""
+    },
+    "category": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "templates[].category",
+      "note": ""
+    },
+    "label": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "templates[].label",
+      "note": ""
+    },
+    "text": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "templates[].text",
+      "note": ""
+    }
+  },
+  "WhatsAppConfig": {
+    "waba_id": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "waba_id",
+      "note": ""
+    },
+    "phone_number_id": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "phone_number_id",
+      "note": ""
+    },
+    "business_phone_number": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "business_phone_number",
+      "note": ""
+    },
+    "api_token": {
+      "kind": "encrypted",
+      "source": "integration_settings.encrypted_secrets",
+      "path": "api_token",
+      "note": "Encrypt server-side; browser receives masked presence only."
+    },
+    "webhook_verify_token": {
+      "kind": "encrypted",
+      "source": "integration_settings.encrypted_secrets",
+      "path": "webhook_verify_token",
+      "note": "Encrypt server-side; browser receives masked presence only."
+    },
+    "default_country_code": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "default_country_code",
+      "note": ""
+    },
+    "auto_greeting_enabled": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "auto_greeting_enabled",
+      "note": ""
+    },
+    "webhook_status": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "webhook_status",
+      "note": ""
+    },
+    "templates": {
+      "kind": "JSON",
+      "source": "integration_settings.config",
+      "path": "templates",
+      "note": ""
+    }
+  },
+  "WhatsAppMessageLog": {
+    "id": {
+      "kind": "column",
+      "source": "communications.id"
+    },
+    "recipient_name": {
+      "kind": "column",
+      "source": "communications.recipient_name"
+    },
+    "recipient_phone": {
+      "kind": "column",
+      "source": "communications.recipient_phone"
+    },
+    "client_id": {
+      "kind": "calculated",
+      "source": "communications.client_id",
+      "note": "Resolve communications owner: direct client_id, subscription.client_id, project.client_id, or lead.client_id."
+    },
+    "client_name": {
+      "kind": "join",
+      "source": "clients.name",
+      "note": "Resolve communications owner: direct client_id, subscription.client_id, project.client_id, or lead.client_id."
+    },
+    "lead_id": {
+      "kind": "column",
+      "source": "communications.lead_id"
+    },
+    "template_used": {
+      "kind": "column",
+      "source": "communications.template_used"
+    },
+    "message_body": {
+      "kind": "column",
+      "source": "communications.body"
+    },
+    "status": {
+      "kind": "column",
+      "source": "communications.status"
+    },
+    "sent_at": {
+      "kind": "column",
+      "source": "communications.sent_at"
+    },
+    "direction": {
+      "kind": "column",
+      "source": "communications.direction"
+    }
+  },
+  "ServiceCatalog": {
+    "id": {
+      "kind": "column",
+      "source": "services_catalog.id"
+    },
+    "service_name": {
+      "kind": "column",
+      "source": "services_catalog.service_name"
+    },
+    "category": {
+      "kind": "column",
+      "source": "services_catalog.category"
+    },
+    "default_rate": {
+      "kind": "column",
+      "source": "services_catalog.default_rate"
+    },
+    "billing_frequency": {
+      "kind": "column",
+      "source": "services_catalog.billing_frequency"
+    },
+    "custom_duration": {
+      "kind": "column",
+      "source": "services_catalog.custom_duration"
+    },
+    "description": {
+      "kind": "column",
+      "source": "services_catalog.description"
+    },
+    "status": {
+      "kind": "column",
+      "source": "services_catalog.status"
+    }
+  },
+  "QuotationLineItem": {
+    "id": {
+      "kind": "column",
+      "source": "commercial_items.ui_id"
+    },
+    "service_id": {
+      "kind": "column",
+      "source": "commercial_items.service_id"
+    },
+    "service_name": {
+      "kind": "column",
+      "source": "commercial_items.service_name"
+    },
+    "description": {
+      "kind": "column",
+      "source": "commercial_items.description"
+    },
+    "quantity": {
+      "kind": "column",
+      "source": "commercial_items.quantity"
+    },
+    "unit": {
+      "kind": "column",
+      "source": "commercial_items.unit"
+    },
+    "unit_price": {
+      "kind": "column",
+      "source": "commercial_items.unit_price"
+    },
+    "amount": {
+      "kind": "calculated",
+      "source": "commercial_items.amount",
+      "note": "Generated ROUND(quantity * unit_price, 2)."
+    },
+    "billing_cycle": {
+      "kind": "column",
+      "source": "commercial_items.billing_cycle"
+    },
+    "service_duration": {
+      "kind": "column",
+      "source": "commercial_items.service_duration"
+    },
+    "custom_duration": {
+      "kind": "column",
+      "source": "commercial_items.custom_duration"
+    },
+    "start_date": {
+      "kind": "column",
+      "source": "commercial_items.start_date"
+    }
+  },
+  "QuotationCustomField": {
+    "id": {
+      "kind": "JSON",
+      "source": "quotations.custom_fields",
+      "path": "[].id",
+      "note": ""
+    },
+    "field_name": {
+      "kind": "JSON",
+      "source": "quotations.custom_fields",
+      "path": "[].field_name",
+      "note": ""
+    },
+    "field_value": {
+      "kind": "JSON",
+      "source": "quotations.custom_fields",
+      "path": "[].field_value",
+      "note": ""
+    }
+  },
+  "Quotation": {
+    "id": {
+      "kind": "column",
+      "source": "quotations.id"
+    },
+    "quotation_number": {
+      "kind": "column",
+      "source": "quotations.quotation_number"
+    },
+    "client_id": {
+      "kind": "column",
+      "source": "quotations.client_id"
+    },
+    "client_name": {
+      "kind": "join",
+      "source": "clients.name",
+      "note": "v_quotations joins client_id."
+    },
+    "client_email": {
+      "kind": "join",
+      "source": "clients.email",
+      "note": "v_quotations."
+    },
+    "client_mobile": {
+      "kind": "join",
+      "source": "clients.mobile",
+      "note": "v_quotations."
+    },
+    "client_address": {
+      "kind": "calculated",
+      "source": "clients.address",
+      "note": "v_quotations concatenates address and city."
+    },
+    "title": {
+      "kind": "column",
+      "source": "quotations.title"
+    },
+    "date": {
+      "kind": "column",
+      "source": "quotations.date"
+    },
+    "valid_until": {
+      "kind": "column",
+      "source": "quotations.valid_until"
+    },
+    "status": {
+      "kind": "column",
+      "source": "quotations.status"
+    },
+    "items": {
+      "kind": "join",
+      "source": "commercial_items.quotation_id",
+      "note": "Rows ordered by position; map QuotationLineItem."
+    },
+    "subtotal": {
+      "kind": "calculated",
+      "source": "commercial_items.amount",
+      "note": "v_quotation_totals: SUM(amount)."
+    },
+    "discount_amount": {
+      "kind": "column",
+      "source": "quotations.discount_amount"
+    },
+    "gst_rate": {
+      "kind": "column",
+      "source": "quotations.gst_rate"
+    },
+    "gst_amount": {
+      "kind": "calculated",
+      "source": "quotations.gst_rate",
+      "note": "v_quotation_totals: ROUND(MAX(subtotal-discount_amount,0)*gst_rate/100,2)."
+    },
+    "grand_total": {
+      "kind": "calculated",
+      "source": "quotations.discount_amount",
+      "note": "v_quotation_totals: MAX(subtotal-discount_amount,0)+gst_amount."
+    },
+    "notes": {
+      "kind": "column",
+      "source": "quotations.notes"
+    },
+    "terms_conditions": {
+      "kind": "column",
+      "source": "quotations.terms_conditions"
+    },
+    "custom_fields": {
+      "kind": "column",
+      "source": "quotations.custom_fields"
+    },
+    "converted_invoice_id": {
+      "kind": "join",
+      "source": "invoices.id",
+      "note": "Find invoices.quotation_id = quotations.id."
+    },
+    "converted_invoice_number": {
+      "kind": "join",
+      "source": "invoices.invoice_number",
+      "note": "Same invoice relation; do not store a second conversion link."
+    },
+    "created_at": {
+      "kind": "column",
+      "source": "quotations.created_at"
+    }
+  },
+  "ClientSubscription": {
+    "custom_duration": {
+      "kind": "column",
+      "source": "client_subscriptions.custom_duration"
+    },
+    "id": {
+      "kind": "column",
+      "source": "client_subscriptions.id"
+    },
+    "client_id": {
+      "kind": "column",
+      "source": "client_subscriptions.client_id"
+    },
+    "client_name": {
+      "kind": "join",
+      "source": "clients.name",
+      "note": "v_subscriptions."
+    },
+    "service_id": {
+      "kind": "column",
+      "source": "client_subscriptions.service_id"
+    },
+    "service_name": {
+      "kind": "join",
+      "source": "services_catalog.service_name",
+      "note": "v_subscriptions."
+    },
+    "category": {
+      "kind": "join",
+      "source": "services_catalog.category",
+      "note": "v_subscriptions."
+    },
+    "billing_cycle": {
+      "kind": "column",
+      "source": "client_subscriptions.billing_cycle"
+    },
+    "start_date": {
+      "kind": "column",
+      "source": "client_subscriptions.start_date"
+    },
+    "expiry_date": {
+      "kind": "column",
+      "source": "client_subscriptions.expiry_date"
+    },
+    "amount": {
+      "kind": "column",
+      "source": "client_subscriptions.amount"
+    },
+    "status": {
+      "kind": "column",
+      "source": "client_subscriptions.status"
+    },
+    "auto_renew": {
+      "kind": "column",
+      "source": "client_subscriptions.auto_renew"
+    },
+    "days_remaining": {
+      "kind": "calculated",
+      "source": "client_subscriptions.expiry_date",
+      "note": "v_subscriptions: DATEDIFF(expiry_date,CURRENT_DATE)."
+    },
+    "last_email_sent_at": {
+      "kind": "calculated",
+      "source": "communications.sent_at",
+      "note": "v_subscriptions: latest successful renewal email."
+    },
+    "email_status": {
+      "kind": "calculated",
+      "source": "communications.status",
+      "note": "v_subscriptions: latest renewal event, default Not Triggered. The API exposes actual failure status and error details for retry."
+    }
+  },
+  "RenewalEmailNotification": {
+    "id": {
+      "kind": "column",
+      "source": "communications.id"
+    },
+    "subscription_id": {
+      "kind": "column",
+      "source": "communications.subscription_id"
+    },
+    "client_id": {
+      "kind": "calculated",
+      "source": "client_subscriptions.client_id",
+      "note": "Join through subscription_id."
+    },
+    "client_name": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "client_name",
+      "note": "Immutable event-time display snapshot; live values come from subscription and client joins."
+    },
+    "client_email": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "client_email",
+      "note": "Immutable event-time display snapshot; live values come from subscription and client joins."
+    },
+    "client_contact": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "client_contact",
+      "note": "Immutable event-time display snapshot; live values come from subscription and client joins."
+    },
+    "service_name": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "service_name",
+      "note": "Immutable event-time display snapshot; live values come from subscription and client joins."
+    },
+    "category": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "category",
+      "note": "Immutable event-time display snapshot; live values come from subscription and client joins."
+    },
+    "amount": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "amount",
+      "note": "Immutable event-time display snapshot; live values come from subscription and client joins."
+    },
+    "billing_cycle": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "billing_cycle",
+      "note": "Immutable event-time display snapshot; live values come from subscription and client joins."
+    },
+    "expiry_date": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "expiry_date",
+      "note": "Immutable event-time display snapshot; live values come from subscription and client joins."
+    },
+    "days_remaining": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "days_remaining",
+      "note": "Immutable event-time display snapshot; live values come from subscription and client joins."
+    },
+    "auto_renew": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "auto_renew",
+      "note": "Immutable event-time display snapshot; live values come from subscription and client joins."
+    },
+    "subject": {
+      "kind": "column",
+      "source": "communications.subject"
+    },
+    "body_text": {
+      "kind": "column",
+      "source": "communications.body"
+    },
+    "status": {
+      "kind": "column",
+      "source": "communications.status"
+    },
+    "error_message": {
+      "kind": "column",
+      "source": "communications.error_message"
+    },
+    "triggered_at": {
+      "kind": "column",
+      "source": "communications.triggered_at"
+    },
+    "sent_at": {
+      "kind": "column",
+      "source": "communications.sent_at"
+    },
+    "simulated_delivery_id": {
+      "kind": "column",
+      "source": "communications.provider_message_id"
+    }
+  },
+  "InvoiceItem": {
+    "id": {
+      "kind": "column",
+      "source": "commercial_items.ui_id"
+    },
+    "desc": {
+      "kind": "column",
+      "source": "commercial_items.description"
+    },
+    "qty": {
+      "kind": "column",
+      "source": "commercial_items.quantity"
+    },
+    "rate": {
+      "kind": "column",
+      "source": "commercial_items.unit_price"
+    },
+    "hsn_sac": {
+      "kind": "column",
+      "source": "commercial_items.hsn_sac"
+    }
+  },
+  "Invoice": {
+    "amount_received": {
+      "kind": "calculated",
+      "source": "payments_received.amount_received",
+      "note": "Non-void invoice receipts; preserves manual Paid balances when no receipt history exists."
+    },
+    "balance_due": {
+      "kind": "calculated",
+      "source": "payments_received.amount_received",
+      "note": "Invoice grand total less non-void receipts, floored at zero."
+    },
+    "receipt_count": {
+      "kind": "calculated",
+      "source": "payments_received.invoice_id",
+      "note": "All receipt records, including voids, distinguish tracked invoices from legacy manual status."
+    },
+    "discount_amount": {
+      "kind": "column",
+      "source": "invoices.discount_amount"
+    },
+    "id": {
+      "kind": "column",
+      "source": "invoices.id"
+    },
+    "invoice_number": {
+      "kind": "column",
+      "source": "invoices.invoice_number"
+    },
+    "client_id": {
+      "kind": "column",
+      "source": "invoices.client_id"
+    },
+    "client_name": {
+      "kind": "join",
+      "source": "clients.name",
+      "note": "v_invoices."
+    },
+    "total_amount": {
+      "kind": "calculated",
+      "source": "commercial_items.amount",
+      "note": "v_invoice_totals: MAX(SUM(amount)-discount_amount,0)."
+    },
+    "gst_tax": {
+      "kind": "calculated",
+      "source": "invoices.gst_rate",
+      "note": "v_invoice_totals: ROUND(discounted total_amount*gst_rate/100,2)."
+    },
+    "grand_total": {
+      "kind": "calculated",
+      "source": "commercial_items.amount",
+      "note": "v_invoice_totals: total_amount+gst_tax."
+    },
+    "payment_status": {
+      "kind": "column",
+      "source": "invoices.payment_status"
+    },
+    "due_date": {
+      "kind": "column",
+      "source": "invoices.due_date"
+    },
+    "created_at": {
+      "kind": "column",
+      "source": "invoices.created_at"
+    },
+    "quotation_ref": {
+      "kind": "join",
+      "source": "quotations.quotation_number",
+      "note": "Resolve to invoices.quotation_id on write; reference must exist and belong to same client."
+    },
+    "notes": {
+      "kind": "column",
+      "source": "invoices.notes"
+    },
+    "items": {
+      "kind": "join",
+      "source": "commercial_items.invoice_id",
+      "note": "Rows ordered by position; map InvoiceItem."
+    },
+    "gst_rate": {
+      "kind": "column",
+      "source": "invoices.gst_rate"
+    }
+  },
+  "Vendor": {
+    "id": {
+      "kind": "column",
+      "source": "vendors.id"
+    },
+    "vendor_name": {
+      "kind": "column",
+      "source": "vendors.vendor_name"
+    },
+    "category": {
+      "kind": "column",
+      "source": "vendors.category"
+    },
+    "contact_person": {
+      "kind": "column",
+      "source": "vendors.contact_person"
+    },
+    "phone": {
+      "kind": "column",
+      "source": "vendors.phone"
+    },
+    "email": {
+      "kind": "column",
+      "source": "vendors.email"
+    },
+    "services_offered": {
+      "kind": "column",
+      "source": "vendors.services_offered"
+    },
+    "status": {
+      "kind": "column",
+      "source": "vendors.status"
+    }
+  },
+  "VendorBill": {
+    "id": {
+      "kind": "column",
+      "source": "vendor_bills.id"
+    },
+    "vendor_id": {
+      "kind": "column",
+      "source": "vendor_bills.vendor_id"
+    },
+    "vendor_name": {
+      "kind": "join",
+      "source": "vendors.vendor_name",
+      "note": "Join vendor_id."
+    },
+    "project_name": {
+      "kind": "column",
+      "source": "vendor_bills.project_name"
+    },
+    "total_amount": {
+      "kind": "column",
+      "source": "vendor_bills.total_amount"
+    },
+    "advance_paid": {
+      "kind": "column",
+      "source": "vendor_bills.advance_paid"
+    },
+    "pending_balance": {
+      "kind": "calculated",
+      "source": "vendor_bills.pending_balance",
+      "note": "Generated MAX(total_amount-advance_paid,0)."
+    },
+    "status": {
+      "kind": "calculated",
+      "source": "vendor_bills.status",
+      "note": "Generated Paid/Partial/Pending from total_amount and advance_paid."
+    },
+    "bill_date": {
+      "kind": "column",
+      "source": "vendor_bills.bill_date"
+    },
+    "recurring_expense_id": {
+      "kind": "column",
+      "source": "vendor_bills.recurring_expense_id"
+    }
+  },
+  "RecurringVendorExpense": {
+    "id": {
+      "kind": "column",
+      "source": "recurring_vendor_expenses.id"
+    },
+    "vendor_id": {
+      "kind": "column",
+      "source": "recurring_vendor_expenses.vendor_id"
+    },
+    "vendor_name": {
+      "kind": "join",
+      "source": "vendors.vendor_name",
+      "note": "Join vendor_id."
+    },
+    "expense_title": {
+      "kind": "column",
+      "source": "recurring_vendor_expenses.expense_title"
+    },
+    "category": {
+      "kind": "column",
+      "source": "recurring_vendor_expenses.category"
+    },
+    "amount": {
+      "kind": "column",
+      "source": "recurring_vendor_expenses.amount"
+    },
+    "frequency": {
+      "kind": "column",
+      "source": "recurring_vendor_expenses.frequency"
+    },
+    "day_of_month": {
+      "kind": "column",
+      "source": "recurring_vendor_expenses.day_of_month"
+    },
+    "next_run_date": {
+      "kind": "column",
+      "source": "recurring_vendor_expenses.next_run_date"
+    },
+    "auto_entry_enabled": {
+      "kind": "column",
+      "source": "recurring_vendor_expenses.auto_entry_enabled"
+    },
+    "last_generated_date": {
+      "kind": "column",
+      "source": "recurring_vendor_expenses.last_generated_date"
+    },
+    "notes": {
+      "kind": "column",
+      "source": "recurring_vendor_expenses.notes"
+    }
+  },
+  "Employee": {
+    "id": {
+      "kind": "column",
+      "source": "employees.id"
+    },
+    "emp_code": {
+      "kind": "column",
+      "source": "employees.emp_code"
+    },
+    "name": {
+      "kind": "column",
+      "source": "employees.name"
+    },
+    "email": {
+      "kind": "column",
+      "source": "employees.email"
+    },
+    "phone": {
+      "kind": "column",
+      "source": "employees.phone"
+    },
+    "designation": {
+      "kind": "column",
+      "source": "employees.designation"
+    },
+    "department": {
+      "kind": "column",
+      "source": "employees.department"
+    },
+    "joining_date": {
+      "kind": "column",
+      "source": "employees.joining_date"
+    },
+    "salary": {
+      "kind": "column",
+      "source": "employees.salary"
+    },
+    "bank_details": {
+      "kind": "column",
+      "source": "employees.bank_details"
+    },
+    "status": {
+      "kind": "column",
+      "source": "employees.status"
+    }
+  },
+  "HrDocument": {
+    "id": {
+      "kind": "column",
+      "source": "documents.id"
+    },
+    "employee_id": {
+      "kind": "column",
+      "source": "documents.employee_id"
+    },
+    "employee_name": {
+      "kind": "join",
+      "source": "employees.name",
+      "note": "Join employee_id. category=HR Document."
+    },
+    "doc_type": {
+      "kind": "column",
+      "source": "documents.doc_type"
+    },
+    "document_data": {
+      "kind": "column",
+      "source": "documents.document_data"
+    },
+    "generated_date": {
+      "kind": "column",
+      "source": "documents.generated_date"
+    }
+  },
+  "ProjectDeadlineNotification": {
+    "id": {
+      "kind": "column",
+      "source": "communications.id"
+    },
+    "project_id": {
+      "kind": "column",
+      "source": "communications.project_id"
+    },
+    "project_title": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "project_title",
+      "note": "Immutable event-time display snapshot."
+    },
+    "client_name": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "client_name",
+      "note": "Historical event snapshot."
+    },
+    "assigned_to": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "assigned_to",
+      "note": "Immutable event-time display snapshot."
+    },
+    "lead_email": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "lead_email",
+      "note": "Immutable event-time display snapshot."
+    },
+    "due_date": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "due_date",
+      "note": "Immutable event-time display snapshot."
+    },
+    "days_remaining": {
+      "kind": "JSON",
+      "source": "communications.context",
+      "path": "days_remaining",
+      "note": "Immutable event-time display snapshot."
+    },
+    "subject": {
+      "kind": "column",
+      "source": "communications.subject"
+    },
+    "body": {
+      "kind": "column",
+      "source": "communications.body"
+    },
+    "status": {
+      "kind": "column",
+      "source": "communications.status"
+    },
+    "sent_at": {
+      "kind": "column",
+      "source": "communications.sent_at"
+    },
+    "urgency": {
+      "kind": "column",
+      "source": "communications.urgency"
+    }
+  },
+  "Project": {
+    "id": {
+      "kind": "column",
+      "source": "projects.id"
+    },
+    "project_title": {
+      "kind": "column",
+      "source": "projects.project_title"
+    },
+    "client_id": {
+      "kind": "column",
+      "source": "projects.client_id"
+    },
+    "client_name": {
+      "kind": "join",
+      "source": "clients.name",
+      "note": "v_projects."
+    },
+    "assigned_to": {
+      "kind": "column",
+      "source": "projects.assigned_to"
+    },
+    "priority": {
+      "kind": "column",
+      "source": "projects.priority"
+    },
+    "status": {
+      "kind": "column",
+      "source": "projects.status"
+    },
+    "due_date": {
+      "kind": "column",
+      "source": "projects.due_date"
+    },
+    "created_at": {
+      "kind": "column",
+      "source": "projects.created_at"
+    },
+    "description": {
+      "kind": "column",
+      "source": "projects.description"
+    },
+    "budget": {
+      "kind": "column",
+      "source": "projects.budget"
+    },
+    "deadline_alerts_enabled": {
+      "kind": "column",
+      "source": "projects.deadline_alerts_enabled"
+    },
+    "alert_threshold_days": {
+      "kind": "column",
+      "source": "projects.alert_threshold_days"
+    },
+    "lead_email": {
+      "kind": "column",
+      "source": "projects.lead_email"
+    },
+    "alert_acknowledged": {
+      "kind": "column",
+      "source": "projects.alert_acknowledged"
+    },
+    "alert_sent_at": {
+      "kind": "calculated",
+      "source": "communications.sent_at",
+      "note": "v_projects: latest successful project deadline email."
+    }
+  },
+  "Task": {
+    "id": {
+      "kind": "column",
+      "source": "tasks.id"
+    },
+    "project_id": {
+      "kind": "column",
+      "source": "tasks.project_id"
+    },
+    "project_title": {
+      "kind": "join",
+      "source": "projects.project_title",
+      "note": "v_tasks."
+    },
+    "client_id": {
+      "kind": "join",
+      "source": "projects.client_id",
+      "note": "v_tasks; no duplicate client_id in tasks."
+    },
+    "client_name": {
+      "kind": "join",
+      "source": "clients.name",
+      "note": "v_tasks joins through project."
+    },
+    "task_title": {
+      "kind": "column",
+      "source": "tasks.task_title"
+    },
+    "description": {
+      "kind": "column",
+      "source": "tasks.description"
+    },
+    "assigned_to": {
+      "kind": "column",
+      "source": "tasks.assigned_to"
+    },
+    "priority": {
+      "kind": "column",
+      "source": "tasks.priority"
+    },
+    "status": {
+      "kind": "column",
+      "source": "tasks.status"
+    },
+    "due_date": {
+      "kind": "column",
+      "source": "tasks.due_date"
+    },
+    "created_at": {
+      "kind": "column",
+      "source": "tasks.created_at"
+    },
+    "tags": {
+      "kind": "column",
+      "source": "tasks.tags"
+    },
+    "estimated_hours": {
+      "kind": "column",
+      "source": "tasks.estimated_hours"
+    },
+    "completed_at": {
+      "kind": "column",
+      "source": "tasks.completed_at"
+    }
+  },
+  "TableCellData": {
+    "id": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].cells.<columnId>.id",
+      "note": ""
+    },
+    "content": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].cells.<columnId>.content",
+      "note": ""
+    },
+    "rowSpan": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].cells.<columnId>.rowSpan",
+      "note": ""
+    },
+    "colSpan": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].cells.<columnId>.colSpan",
+      "note": ""
+    },
+    "isHeader": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].cells.<columnId>.isHeader",
+      "note": ""
+    },
+    "align": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].cells.<columnId>.align",
+      "note": ""
+    },
+    "bold": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].cells.<columnId>.bold",
+      "note": ""
+    },
+    "isMergedHidden": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].cells.<columnId>.isMergedHidden",
+      "note": ""
+    }
+  },
+  "CustomTableRow": {
+    "id": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].id",
+      "note": ""
+    },
+    "isSectionHeadline": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].isSectionHeadline",
+      "note": ""
+    },
+    "headlineText": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].headlineText",
+      "note": ""
+    },
+    "headlineSubtitle": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].headlineSubtitle",
+      "note": ""
+    },
+    "headlineTheme": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].headlineTheme",
+      "note": ""
+    },
+    "cells": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows[].cells",
+      "note": ""
+    }
+  },
+  "CustomTableData": {
+    "id": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "id",
+      "note": ""
+    },
+    "title": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "title",
+      "note": ""
+    },
+    "headlineKicker": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "headlineKicker",
+      "note": ""
+    },
+    "description": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "description",
+      "note": ""
+    },
+    "theme": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "theme",
+      "note": ""
+    },
+    "headlineAlign": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "headlineAlign",
+      "note": ""
+    },
+    "columns": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "columns",
+      "note": ""
+    },
+    "rows": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "rows",
+      "note": ""
+    },
+    "created_at": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "created_at",
+      "note": ""
+    },
+    "updated_at": {
+      "kind": "JSON",
+      "source": "documents.document_data",
+      "path": "updated_at",
+      "note": ""
+    }
+  },
+  "StoredClientFile": {
+    "notes": {
+      "kind": "column",
+      "source": "documents.notes"
+    },
+    "id": {
+      "kind": "column",
+      "source": "documents.ui_id"
+    },
+    "client_id": {
+      "kind": "column",
+      "source": "documents.client_id"
+    },
+    "client_name": {
+      "kind": "join",
+      "source": "clients.name",
+      "note": "Join client_id; folders are grouped by client, no folder table."
+    },
+    "file_name": {
+      "kind": "column",
+      "source": "documents.file_name"
+    },
+    "category": {
+      "kind": "column",
+      "source": "documents.category"
+    },
+    "file_type": {
+      "kind": "column",
+      "source": "documents.file_type"
+    },
+    "file_size": {
+      "kind": "column",
+      "source": "documents.file_size"
+    },
+    "uploaded_at": {
+      "kind": "column",
+      "source": "documents.uploaded_at"
+    },
+    "uploaded_by": {
+      "kind": "column",
+      "source": "documents.uploaded_by"
+    },
+    "reference_id": {
+      "kind": "calculated",
+      "source": "documents.reference_type",
+      "note": "quotation: quotations.quotation_number; invoice: invoices.invoice_number; custom_table: document_data.id; upload: omitted. Resolve number/id to FK on write."
+    },
+    "reference_type": {
+      "kind": "column",
+      "source": "documents.reference_type"
+    },
+    "table_data": {
+      "kind": "column",
+      "source": "documents.document_data"
+    },
+    "file_url": {
+      "kind": "column",
+      "source": "documents.file_url"
+    },
+    "tag": {
+      "kind": "column",
+      "source": "documents.tag"
+    },
+    "project_id": {
+      "kind": "column",
+      "source": "documents.project_id"
+    },
+    "project_name": {
+      "kind": "join",
+      "source": "projects.project_title",
+      "note": "Join project_id."
+    }
+  }
+}

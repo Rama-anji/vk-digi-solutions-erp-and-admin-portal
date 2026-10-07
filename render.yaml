@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: vkd-erp-portal
+    runtime: docker
+    plan: starter
+    healthCheckPath: /api/index.php?action=session
+    envVars:
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: APP_KEY
+        sync: false
+      - key: PORT
+        value: "10000"

@@ -1,0 +1,98 @@
+# ==============================================================================
+# VK DIGI SOLUTIONS ERP & ADMIN PORTAL
+# Apache Web Server Configuration (.htaccess)
+# Designed & Hardened for: Hostinger Linux Shared Web Hosting (PHP 8.1 / 8.2)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. DIRECTORY BROWSING & SYMLINKS
+# ------------------------------------------------------------------------------
+Options -Indexes +FollowSymLinks
+
+# ------------------------------------------------------------------------------
+# 2. DEFAULT DOCUMENT ENTRY
+# ------------------------------------------------------------------------------
+DirectoryIndex index.php
+
+# ------------------------------------------------------------------------------
+# 3. PROTECT CRITICAL & SENSITIVE FILES FROM DIRECT HTTP DOWNLOAD
+# ------------------------------------------------------------------------------
+<FilesMatch "\.(sql|env|log|ini|sh|bak|git|json|lock)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Explicitly guard db.sql and error logs
+<Files "db.sql">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</Files>
+
+<Files "error_log.log">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</Files>
+
+# ------------------------------------------------------------------------------
+# 4. HTTP SECURITY HEADERS
+# ------------------------------------------------------------------------------
+<IfModule mod_headers.c>
+    # Prevent clickjacking attacks (allows same-origin printing/framing if needed)
+    Header always set X-Frame-Options "SAMEORIGIN"
+
+    # Block MIME-type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Enforce standard XSS protection
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Safe Referrer Policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# 5. UTF-8 DEFAULT CHARSET ENCODING
+# ------------------------------------------------------------------------------
+AddDefaultCharset UTF-8
+DefaultLanguage en-US
+
+# ------------------------------------------------------------------------------
+# 6. GZIP COMPRESSION FOR HIGH-SPEED LOADING ON HOSTINGER
+# ------------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# 7. CLEAN URL REWRITING (MOD_REWRITE)
+# ------------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Keep old bookmarks working through the connected portal and its login.
+    RewriteRule ^(?:dashboard\.php|auth/login\.php)$ legacy-route.php?tab=dashboard [L]
+    RewriteRule ^clients/add\.php$ legacy-route.php?tab=clients&create=1 [L]
+    RewriteRule ^invoices/create\.php$ legacy-route.php?tab=invoices&create=1 [L]
+    RewriteRule ^(clients|renewals|invoices|quotations|vault)/(?:index|renew)\.php$ legacy-route.php?tab=$1 [L]
+    RewriteRule ^vendors/bills\.php$ legacy-route.php?tab=vendors [L]
+    RewriteRule ^hr/documents\.php$ legacy-route.php?tab=hr [L]
+    RewriteRule ^(?:node_modules|database|tests|scripts|\.storage)(?:/|$) - [F,L]
+    RewriteRule ^assets/(.*)$ dist/assets/$1 [L]
+    RewriteRule ^(dashboard|clients|renewals|invoices|quotations|vendors|hr)/?$ legacy-route.php?tab=$1 [L]
+    RewriteRule ^login/?$ legacy-route.php?tab=dashboard [L]
+</IfModule>
+
