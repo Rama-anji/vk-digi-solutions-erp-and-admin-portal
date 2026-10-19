@@ -4,18 +4,52 @@ services:
     runtime: docker
     plan: starter
     healthCheckPath: /api/index.php?action=session
+    disk:
+      name: vkd-erp-storage
+      mountPath: /var/www/html/.storage
+      sizeGB: 1
     envVars:
       - key: DB_HOST
         sync: false
       - key: DB_PORT
-        value: "3306"
+        sync: false
       - key: DB_NAME
         sync: false
       - key: DB_USER
         sync: false
       - key: DB_PASSWORD
         sync: false
-      - key: APP_KEY
+      - key: DB_SSL_CA_PEM
         sync: false
+      - key: APP_KEY
+        generateValue: true
+      - key: INITIAL_ADMIN_EMAIL
+        value: admin@vkdsolutions.com
+      - key: INITIAL_ADMIN_PASSWORD
+        generateValue: true
       - key: PORT
         value: "10000"
+  - type: cron
+    name: vkd-erp-automation
+    runtime: docker
+    plan: starter
+    schedule: "* * * * *"
+    dockerCommand: php /var/www/html/api/worker.php
+    envVars:
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_SSL_CA_PEM
+        sync: false
+      - key: APP_KEY
+        fromService:
+          name: vkd-erp-portal
+          type: web
+          envVarKey: APP_KEY

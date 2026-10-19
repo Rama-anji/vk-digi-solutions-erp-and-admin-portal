@@ -22,7 +22,21 @@ function db(): PDO {
     static $db;
     if (!$db) {
         $c=config();
-        $db=new PDO("mysql:host={$c['host']};port={$c['port']};dbname={$c['database']};charset=utf8mb4",$c['user'],$c['password'],[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC,PDO::ATTR_EMULATE_PREPARES=>false]);
+        $options = [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC,PDO::ATTR_EMULATE_PREPARES=>false];
+        $caPem = getenv('DB_SSL_CA_PEM') ?: '';
+        $caPath = getenv('DB_SSL_CA') ?: '';
+        if ($caPem !== '') {
+            $caPath = tempnam(sys_get_temp_dir(), 'vkd-ca-');
+            if ($caPath === false || file_put_contents($caPath, $caPem) === false) {
+                throw new RuntimeException('Unable to prepare database CA certificate.');
+            }
+            register_shutdown_function(static function () use ($caPath): void { @unlink($caPath); });
+        }
+        if ($caPath !== '') {
+            $options[PDO::MYSQL_ATTR_SSL_CA] = $caPath;
+            $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = true;
+        }
+        $db=new PDO("mysql:host={$c['host']};port={$c['port']};dbname={$c['database']};charset=utf8mb4",$c['user'],$c['password'],$options);
         $db->exec("SET SESSION time_zone='+05:30', sql_mode='STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION'");
     }
     return $db;
