@@ -26,15 +26,20 @@ $tableExists = (int)query(
     "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='admins'"
 )->fetchColumn() > 0;
 
-if (!$tableExists) {
+if (!$tableExists || (int)query('SELECT COUNT(*) FROM admins')->fetchColumn() === 0) {
     $sql = file_get_contents(__DIR__ . '/../db.sql');
     if ($sql === false) {
         throw new RuntimeException('Database schema file is missing.');
     }
     $sql = preg_replace('/^--.*$/m', '', $sql);
     $sql = preg_replace('/^\s*CREATE DATABASE.*?;\s*USE.*?;\s*/si', '', $sql, 1);
+    $sql = preg_replace('/CREATE TABLE (?!IF NOT EXISTS)/i', 'CREATE TABLE IF NOT EXISTS ', $sql);
     foreach (preg_split('/;\s*(?:\r?\n|$)/', trim($sql)) as $statement) {
         if (trim($statement) !== '') {
+            if (preg_match('/^CREATE SQL SECURITY INVOKER VIEW (\w+)/i', trim($statement), $match)
+                && (int)query('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?', [$match[1]])->fetchColumn() > 0) {
+                continue;
+            }
             $pdo->exec(trim($statement));
         }
     }

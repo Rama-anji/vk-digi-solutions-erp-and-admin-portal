@@ -222,9 +222,9 @@ CHECK ((category='HR Document' AND employee_id IS NOT NULL AND doc_type IS NOT N
  OR (category<>'HR Document' AND client_id IS NOT NULL AND ui_id IS NOT NULL AND file_name IS NOT NULL AND file_type IS NOT NULL AND doc_type IS NULL)),
 CHECK (COALESCE((reference_type='quotation' AND quotation_id IS NOT NULL AND invoice_id IS NULL)
  OR (reference_type='invoice' AND invoice_id IS NOT NULL AND quotation_id IS NULL)
- OR ((reference_type IS NULL OR reference_type IN ('custom_table','upload')) AND invoice_id IS NULL AND quotation_id IS NULL),0)),
+ OR ((reference_type IS NULL OR reference_type IN ('custom_table','upload')) AND invoice_id IS NULL AND quotation_id IS NULL),0)=1),
 CHECK (document_data IS NULL OR JSON_TYPE(document_data)='OBJECT'),
-CHECK (COALESCE(category<>'Custom Table' OR (document_data IS NOT NULL AND reference_type='custom_table'),0))
+CHECK (COALESCE(category<>'Custom Table' OR (document_data IS NOT NULL AND reference_type='custom_table'),0)=1)
 ) ENGINE=InnoDB;
 
 CREATE TABLE `facebook_leads` (
