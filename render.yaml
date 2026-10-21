@@ -15,8 +15,8 @@ services:
         sync: false
       - key: DB_PASSWORD
         sync: false
-      - key: DB_SSL_CA_PEM
-        sync: false
+      - key: DB_SSL_CA
+        value: /var/www/html/docker/aiven-ca.pem
       - key: APP_KEY
         generateValue: true
       - key: INITIAL_ADMIN_EMAIL
