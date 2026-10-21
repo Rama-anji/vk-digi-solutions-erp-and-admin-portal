@@ -14,6 +14,7 @@ while (true) {
         $pdo = db();
         break;
     } catch (Throwable $error) {
+        fwrite(STDERR, 'Database connection attempt ' . ($attempts + 1) . ' failed: ' . $error->getMessage() . "\n");
         if (++$attempts >= 60) {
             fwrite(STDERR, "Database did not become available during startup.\n");
             exit(1);
