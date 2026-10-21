@@ -12,4 +12,3 @@ playwright-report/
 *.log
 .env*
 !.env.example
-init-status.txt

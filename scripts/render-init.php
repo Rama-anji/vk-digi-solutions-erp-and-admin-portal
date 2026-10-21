@@ -8,15 +8,6 @@ if (PHP_SAPI !== 'cli') {
 
 require_once __DIR__ . '/../api/bootstrap.php';
 
-// Temporary deployment diagnostic, served at /init-status.txt.
-function init_status(string $message): void {
-    @file_put_contents(__DIR__ . '/../init-status.txt', gmdate('c') . ' ' . $message . "\n");
-}
-set_exception_handler(static function (Throwable $error): void {
-    init_status('FAILED: ' . $error->getMessage());
-    fwrite(STDERR, $error->getMessage() . "\n");
-    exit(1);
-});
 
 $attempts = 0;
 while (true) {
@@ -26,7 +17,6 @@ while (true) {
     } catch (Throwable $error) {
         fwrite(STDERR, 'Database connection attempt ' . ($attempts + 1) . ' failed: ' . $error->getMessage() . "\n");
         if (++$attempts >= 20) {
-            init_status('FAILED: database connection: ' . $error->getMessage());
             fwrite(STDERR, "Database did not become available during startup.\n");
             exit(1);
         }
@@ -84,4 +74,3 @@ if ($admins === 0) {
 } else {
     echo "Existing administrator account found; no login credentials were changed.\n";
 }
-init_status('OK: database ready');
