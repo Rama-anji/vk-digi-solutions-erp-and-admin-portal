@@ -20,4 +20,9 @@ chown -R www-data:www-data /var/www/html/.storage
 
 php /var/www/html/scripts/render-init.php || echo "WARNING: database initialisation failed; starting the web server anyway." >&2
 
+# Render's free plan has no cron jobs, so run the automation worker every minute in the background.
+if [ "${RUN_AUTOMATION_LOOP:-1}" = "1" ]; then
+    (while true; do php /var/www/html/api/worker.php || echo "Automation worker run failed." >&2; sleep 60; done) &
+fi
+
 exec apache2-foreground

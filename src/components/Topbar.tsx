@@ -272,8 +272,7 @@ export const Topbar: React.FC<TopbarProps> = ({
           className="flex items-center space-x-1.5 px-3.5 py-2 bg-[#EF7C00] hover:bg-[#D96F00] text-white text-xs font-bold rounded-xl shadow-md shadow-orange-500/20 transition active:scale-95"
         >
           <Plus size={15} />
-          <span className="hidden sm:inline">+ New Client</span>
-          <span className="sm:hidden">New</span>
+          New Client
         </ActionButton>
 
           {/* Admin Profile Dropdown */}
