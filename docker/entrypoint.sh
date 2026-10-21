@@ -18,6 +18,6 @@ sed -i "s/*:10000/*:${PORT}/" /etc/apache2/sites-available/000-default.conf
 mkdir -p /var/www/html/.storage/uploads /var/www/html/.storage/sessions
 chown -R www-data:www-data /var/www/html/.storage
 
-php /var/www/html/scripts/render-init.php
+php /var/www/html/scripts/render-init.php || echo "WARNING: database initialisation failed; starting the web server anyway." >&2
 
 exec apache2-foreground
