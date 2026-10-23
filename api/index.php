@@ -9,6 +9,7 @@ try {
         $admin=isset($_SESSION['admin_id'])?row("SELECT id,name,email,role FROM admins WHERE id=? AND status='Active'",[$_SESSION['admin_id']]):null;
         echo json_encode(['user'=>$admin,'csrf'=>$_SESSION['csrf']]); exit;
     }
+    if($method==='GET' && $action==='ping') { query('SELECT 1'); echo '{"ok":true}'; exit; }
     if($method==='POST') {
         if(!hash_equals($_SESSION['csrf'],$_SERVER['HTTP_X_CSRF_TOKEN']??'')) fail('Your session expired. Refresh and retry.',403);
         $input=str_starts_with($_SERVER['CONTENT_TYPE']??'','multipart/form-data')?$_POST:json_decode(file_get_contents('php://input'),true,512,JSON_THROW_ON_ERROR);
@@ -83,7 +84,7 @@ try {
     if($error instanceof PDOException) {
         $code=(int)($error->errorInfo[1]??0);
         if(in_array($code,[2002,2006,2013],true))$status=503;
-        $message=match($code){2002,2006,2013=>'The database is unavailable. Start MySQL in XAMPP, then retry.',1062=>'A record with this code or reference already exists.',1451=>'This record is used by another record. Remove its links or mark it inactive.',1452=>'A selected related record does not exist or belongs to a different client.',4025=>'One or more fields do not meet the database rules. Check dates, amounts, and required fields.',default=>'The record could not be saved. Check required fields and data types.'};
+        $message=match($code){2002,2006,2013=>getenv('DB_HOST')?'The database is unavailable. If it is a free Aiven database, power it on in the Aiven console, wait until it is Running, then retry.':'The database is unavailable. Start MySQL in XAMPP, then retry.',1062=>'A record with this code or reference already exists.',1451=>'This record is used by another record. Remove its links or mark it inactive.',1452=>'A selected related record does not exist or belongs to a different client.',4025=>'One or more fields do not meet the database rules. Check dates, amounts, and required fields.',default=>'The record could not be saved. Check required fields and data types.'};
     }
     if($status>=500) error_log($error->__toString());
     http_response_code($status); echo json_encode(['error'=>$message]);
